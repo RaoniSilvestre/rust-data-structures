@@ -1,41 +1,33 @@
-use super::{Node, Stack};
+use super::{Stack, StackLink, StackNode};
 
-impl<T: Copy + Clone> Stack<T> {
+impl<T: Copy + Clone + PartialEq> Stack<T> {
     pub fn new() -> Stack<T> {
-        Stack {
-            top: None,
-            heigh: 0,
-        }
+        Stack { top: None }
     }
 
     pub fn is_empty(&self) -> bool {
-        self.heigh == 0
+        self.top == None
     }
 
-    pub fn top(&mut self) -> Option<T> {
+    pub fn top(&self) -> Option<T> {
         match &self.top {
-            Option::Some(node) => Some(node.get()),
+            Option::Some(node) => Some(node.value),
             Option::None => None,
         }
     }
 
     pub fn push(&mut self, value: T) {
-        self.heigh += 1;
         match &self.top {
             Option::Some(node) => {
-                self.top = Some(Box::new(Node::new(value, Some(node.clone()))));
+                self.top = new_link(value, Some(node.clone()));
             }
             Option::None => {
-                self.top = Some(Box::new(Node::new(value, None)));
+                self.top = new_link(value, None);
             }
         };
     }
 
     pub fn pop(&mut self) {
-        if self.heigh == 0 {
-            return;
-        }
-        self.heigh -= 1;
         match &self.top {
             Some(node) => {
                 self.top = node.pred.clone();
@@ -45,12 +37,12 @@ impl<T: Copy + Clone> Stack<T> {
     }
 }
 
-impl<T: Copy> Node<T> {
-    pub fn new(value: T, pred: Option<Box<Node<T>>>) -> Node<T> {
-        Node { value, pred }
+impl<T: Copy> StackNode<T> {
+    fn new(value: T, pred: Option<Box<StackNode<T>>>) -> StackNode<T> {
+        StackNode { value, pred }
     }
+}
 
-    pub fn get(&self) -> T {
-        self.value
-    }
+fn new_link<T: Copy>(value: T, predecessor: Option<Box<StackNode<T>>>) -> StackLink<T> {
+    Some(Box::new(StackNode::new(value, predecessor)))
 }

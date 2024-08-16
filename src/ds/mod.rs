@@ -1,13 +1,36 @@
+use std::{cell::RefCell, rc::Rc};
+
+// Stack definition
+
+type StackLink<T> = Option<Box<StackNode<T>>>;
+
 #[derive(Debug)]
 pub struct Stack<T> {
-    pub top: Option<Box<Node<T>>>,
-    pub heigh: usize,
+    top: StackLink<T>,
 }
 
-#[derive(Debug, Clone)]
-pub struct Node<T> {
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct StackNode<T> {
     pub value: T,
-    pub pred: Option<Box<Node<T>>>,
+    pub pred: StackLink<T>,
 }
 
-pub mod stack;
+///////////////////////////////////////////
+// Queue definition
+
+type QueueLink<T> = Option<Rc<RefCell<QueueNode<T>>>>;
+
+#[derive(Debug)]
+pub struct Queue<T> {
+    front: QueueLink<T>,
+    rear: QueueLink<T>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct QueueNode<T> {
+    pub value: T,
+    pub next: QueueLink<T>,
+}
+
+mod queue;
+mod stack;
