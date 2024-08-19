@@ -18,6 +18,8 @@ struct StackNode<T> {
 ///////////////////////////////////////////
 // Queue definition
 
+// Why use Rc<RefCell<T>>:
+// https://doc.rust-lang.org/book/ch15-05-interior-mutability.html
 type QueueLink<T> = Option<Rc<RefCell<QueueNode<T>>>>;
 
 #[derive(Debug)]
@@ -28,8 +30,8 @@ pub struct Queue<T> {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 struct QueueNode<T> {
-    pub value: T,
-    pub next: QueueLink<T>,
+    value: T,
+    next: QueueLink<T>,
 }
 
 mod queue;

@@ -8,5 +8,7 @@ fn main() {
     queue.enqueue(123);
     queue.enqueue(42);
 
+    queue.dequeue();
+
     println!("{}", queue);
 }
